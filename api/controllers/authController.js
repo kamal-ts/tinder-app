@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-import { validationResult } from "express-validator";
+import { ResponseError } from "../error/response-error.js";
 
 const signToken = (id) => {
     // jwt token
@@ -9,14 +9,14 @@ const signToken = (id) => {
     });
 }
 
-const signup = async (req, res) => {
+const signup = async (req, res, next) => {
 
     try {
         const {name, email, password, age, gender, genderPreference} = req.body;
 
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+        const user = await User.findOne({email: email});
+        if (user) {
+            throw new ResponseError(400, 'User already exist!');
         }
 
         const newUser = await User.create({
@@ -32,7 +32,7 @@ const signup = async (req, res) => {
         res.cookie('jwt', token, {
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in millisecons
             httpOnly: true, // prevents XXS attacks
-            sameSite: 'strick', // prefents CSRF attacks
+            sameSite: "strict", // prefents CSRF attacks
             secure: process.env.NODE_ENV === "production", 
         });
 
@@ -42,11 +42,7 @@ const signup = async (req, res) => {
         });
 
     } catch (error) {
-        console.log('Error in signup controller', error);
-        res.status(500).json({
-            success: false,
-            message: "Server error"
-        });
+        next(error);
     }
 }
 const login = async (req, res) => { res.status(200).json({
