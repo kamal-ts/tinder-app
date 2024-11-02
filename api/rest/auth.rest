@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
     "name": "kamal", 
-    "email": "kamal@gmail.com",
+    "email": "kamal2@gmail.com",
     "password": "password",
     "age": 18,
     "gender": "male",
@@ -12,4 +12,16 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:5000/api/auth/login
+POST  http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{ 
+    "email": "kamal@gmail.com",
+    "password": "password"
+}
+
+###
+POST  http://localhost:5000/api/auth/logout
+
+###
+GET  http://localhost:5000/api/auth/me
