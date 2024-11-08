@@ -1,0 +1,7 @@
+###
+PUT  http://localhost:5000/api/users/update
+Content-Type: application/json
+
+{ 
+    "bio": "dadas dadadad a daw"
+}

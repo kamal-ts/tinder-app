@@ -19,13 +19,13 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
-// app.use("/api/users", userRoutes);
-// app.use("/api/matches", matchRoutes);
-// app.use("/api/messages", messageRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/matches", matchRoutes);
+app.use("/api/messages", messageRoutes);
 
 app.use(errorMiddleware);
 
+connectDB();
 app.listen(PORT, () => {
     console.log('server started at this port: ' + PORT);
-    connectDB();
 });
