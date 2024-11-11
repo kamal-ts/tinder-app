@@ -5,9 +5,9 @@ Content-Type: application/json
 {
     "name": "kamal3", 
     "email": "kamal3@gmail.com",
-    "password": "password",
+    "password": "pass",
     "age": 18,
-    "gender": "male",
+    "gender": "ff",
     "genderPreference": "female"
 }
 
