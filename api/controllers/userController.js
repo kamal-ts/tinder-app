@@ -19,10 +19,7 @@ const updateProfile = async (req, res, next) => {
                 } catch (error) {
                     console.error("Error uploading image:", uploadError);
                     console.error(error) 
-                    return res.status(400).json({
-                        success: false,
-                        message: "Error uploading image",
-                    });
+                    throw new ResponseError(400, "Error uploading image");
                 }
             }
         }
