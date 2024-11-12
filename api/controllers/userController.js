@@ -5,26 +5,32 @@ import User from "../models/User.js";
 const updateProfile = async (req, res, next) => {
     try {
         const { image, ...otherData } = req.body;
-        let updateData = otherData;
-        console.table([updateData, req.user.id, req.body])
 
-        // TODO: EXPLAIN THIS ONCE AGAIN IN THE UI PART
+        let updatedData = otherData;
+        
         if (image) {
             // base64 format
-            if (image.starstWith("data:image")) {
+            if (image.startsWith("data:image")) {
                 try {
                     const uploadResponse = await cloudinary.uploader.upload(image);
-                    updateData.image = uploadResponse.secure_url;
+                    console.log("image data:", image);
+                    console.log("uploadResponse:", uploadResponse);
+                    updatedData.image = uploadResponse.secure_url;
                 } catch (error) {
-                    console.log('error uploading image', error);
-                    throw new ResponseError(400, "Error uploading image");
+                    console.error("Error uploading image:", uploadError);
+                    console.error(error) 
+                    return res.status(400).json({
+                        success: false,
+                        message: "Error uploading image",
+                    });
                 }
             }
         }
-        
-        const updateUser = await User.findByIdAndUpdate(req.user.id, updateData, { new: true });
+
+        const updatedUser = await User.findByIdAndUpdate(req.user.id, updatedData, { new: true });
+
         res.status(200).json({
-            user: updateUser
+            user: updatedUser
         });
 
     } catch (error) {
