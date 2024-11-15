@@ -55,8 +55,14 @@ const login = async (req, res, next) => {
         // find user base on email and password in databse
         const user = await User.findOne({ email }).select("+password");
         // check in is there is user matching 
-        if (!user || !(await user.matchPassword(password))) {
-            throw new ResponseError(401, "Invalid email or password!")
+        // if (!user || !(await user.matchPassword(password))) {
+        //     throw new ResponseError(401, "Invalid email or password!")
+        // }
+        if (!user) {
+            throw new ResponseError(401, "Invalid email!")
+        }
+        if (!(await user.matchPassword(password))) {
+            throw new ResponseError(401, "Invalid password!")
         }
 
         const token = signToken(user._id);

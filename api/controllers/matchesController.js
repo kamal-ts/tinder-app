@@ -1,5 +1,6 @@
 import { ResponseError } from "../error/response-error.js";
 import User from "../models/User.js";
+import { getConnectedUsers, getIO } from "../socket/socket.server.js";
 
 const swipeRight = async (req, res, next) => {
     try {
@@ -23,13 +24,34 @@ const swipeRight = async (req, res, next) => {
 
                 // save both of them
                 await Promise.all([
-                    await currentUser.save(), 
+                    await currentUser.save(),
                     await likedUser.save()
                 ])
+
+                // send notification in real time with socket.io 
+                const connectedUsers = getConnectedUsers();
+                const io = getIO();
+
+                const likedUserSocketId = connectedUsers.get(likedUserId)
+
+                if (likedUserSocketId) {
+                    io.to(likedUserSocketId).emit("newMatch", {
+                        _id: currentUser._id,
+                        name: currentUser.name,
+                        image: currentUser.image
+                    })
+                }
+
+                const currentSocketId = connectedUsers.get(currentUser._id.toString());
+
+                if (currentSocketId) {
+                    io.to(currentSocketId).emit("newMatch", {
+                        _id: likedUser._id,
+                        name: likedUser.name,
+                        image: likedUser.image
+                    })
+                }
             }
-
-            // TODO SEND NOTIFICATION IF IT IS A MATCH => SOCKET.IO
-
         }
 
         res.status(200).json({
@@ -62,7 +84,7 @@ const swipeLeft = async (req, res, next) => {
 
 const getMatches = async (req, res, next) => {
     try {
-        const user = await User.findById(req.user.id).populate("matches", "email image");
+        const user = await User.findById(req.user.id).populate("matches", "name image");
         res.status(200).json({
             data: user.matches
         });

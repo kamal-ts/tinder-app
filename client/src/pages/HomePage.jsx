@@ -1,21 +1,35 @@
 import { useEffect } from "react";
 import Sidebar from "../components/Sidebar";
-import { useAuthStore } from "../store/useAuthStrore"
 import { useMatchStore } from "../store/useMatchStore";
 import {Header} from '../components/Header'
 import { Frown } from "lucide-react";
 import SwipeArea from "../components/SwipeArea";
 import SwipeFeedBack from "../components/SwipeFeedBack";
+import { useAuthStore } from "../store/useAuthStrore";
 
 const HomePage = () => {
-  const {logout} = useAuthStore();
-  const {isLoadingUserProfiles, getUserProfiles, userProfiles} = useMatchStore();
+  const {
+    isLoadingUserProfiles,
+    getUserProfiles, 
+    userProfiles, 
+    subscribeToNewMatches, 
+    unsubscribeFromNewMatches 
+  } = useMatchStore();
+
+  const {authUser} = useAuthStore();
 
   useEffect(() => {
     getUserProfiles();
-  }, [getUserProfiles])
+  }, [getUserProfiles]);
+
+  useEffect(() => {
+    authUser && subscribeToNewMatches();
+
+    // return () => {
+    //   unsubscribeFromNewMatches();
+    // }
+  }, [subscribeToNewMatches, unsubscribeFromNewMatches, authUser])
   
-  console.log('getUserProfiles', userProfiles);
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-gradient-to-br from-pink-100 to-purple-100">
@@ -30,9 +44,7 @@ const HomePage = () => {
             </>
           )}
 
-          {userProfiles.length === 0 && !isLoadingUserProfiles && (
-            <NoMoreProfiles/>
-          )}
+          {userProfiles.length === 0 && !isLoadingUserProfiles && <NoMoreProfiles/> }
 
           {isLoadingUserProfiles && <LoadingUI/>}
 
