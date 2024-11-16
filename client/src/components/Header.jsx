@@ -67,7 +67,7 @@ export const Header = () => {
                                     onClick={() => setDropDownOpen(!dropDownOpen)}
                                     className="flex items-center space-x-2 focus:outline-none"
                                 >
-                                    <img src={authUser.image || "avatar.png"} alt="users profile image"
+                                    <img src={ authUser.image || "/avatar.png"} alt="users profile image"
                                         className="h-10 w-10 object-cover rounded-full border-2 border-white"
                                     />
                                     <span className="text-white font-medium">

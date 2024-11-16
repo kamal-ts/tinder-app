@@ -1,4 +1,6 @@
+import { ResponseError } from "../error/response-error.js";
 import Message from "../models/Message.js";
+import { getConnectedUsers, getIO } from "../socket/socket.server.js";
 
 const sendMessage = async (req, res, next) => {
     try {
@@ -8,8 +10,17 @@ const sendMessage = async (req, res, next) => {
             receiver: receiverId,
             content
         });
+        // socket
+        const connectedUsers = getConnectedUsers();
+        const io = getIO();
+        const receiverSocketId = connectedUsers.get(receiverId);
+        
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit("newMessage", {
+                message: newMessage
+            })
+        }
 
-        // TODO: SEND THE MESSAGE IN REAL TIME => SOCKET.IO 
         res.status(201).json({
             data: newMessage
         })
@@ -20,20 +31,23 @@ const sendMessage = async (req, res, next) => {
 }
 
 const getConversation = async (req, res, next) => {
-    const {userId} = req.params;
     try {
-        const message = Message.find({
+        const {userId} = req.params;
+        // Validasi input
+        if (!userId) {
+            throw new ResponseError(400, "Missing userId ");
+        };
+
+        const message = await Message.find({
             $or: [
                 {sender: req.user._id, receiver: userId},
                 {sender: userId, receiver: req.user._id},
 
             ]
-        })
-
+        });
         res.status(200).json({
             data: message
         })
-
     } catch (error) {
         next(error);
     }
