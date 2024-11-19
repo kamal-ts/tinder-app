@@ -4,7 +4,7 @@
       { "src": "/api/(.*)", "dest": "/api/server.js" },
       { "src": "/(.*)", "dest": "/client/dist/$1" }
     ],
-    "outputDirectory": "build",
+    "outputDirectory": "dist",
     "env": {
       "NODE_ENV": "production"
     }
