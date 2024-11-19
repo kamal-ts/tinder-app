@@ -5,7 +5,7 @@ import cors from 'cors';
 import { connectDB } from './config/db.js';
 import { errorMiddleware } from './middleware/error-middleware.js';
 import path from 'path';
-import {createServer} from 'http'
+import { createServer } from 'http'
 
 
 // route
@@ -44,11 +44,11 @@ app.use("/api/messages", messageRoutes);
 app.use(errorMiddleware);
 
 if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname,"/client/dist")));
+    app.use(express.static(path.join(__dirname, "/client/dist")));
 
     app.get("*", (req, res) => {
         res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"));
-    })
+    });
 }
 
 httpServer.listen(PORT, () => {
