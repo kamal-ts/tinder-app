@@ -1,8 +1,8 @@
 import axios from 'axios';
 
+const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5000/api" : "/api";
 
-// TODO UPDATE THE BASE URL HERE SO THAT IT WORKS IN THE DEVELOPMENT AS WELL
 export const axiosInstance = axios.create({
-    baseURL: "http://localhost:5000/api",
+    baseURL: BASE_URL,
     withCredentials: true,
 })
