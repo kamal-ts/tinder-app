@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = import.meta.env.API_URL;
+const BASE_URL = "https://tinder-app-92m1.vercel.app/api";
 // const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5000/api" : "/api";
 
 export const axiosInstance = axios.create({
