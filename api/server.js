@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { connectDB } from './config/db.js';
 import { errorMiddleware } from './middleware/error-middleware.js';
-import path from 'path';
+// import path from 'path';
 import { createServer } from 'http'
 
 
@@ -23,7 +23,7 @@ const app = express();
 const httpServer = createServer(app);
 const PORT = process.env.PORT || 5000;
 
-const __dirname = path.resolve();
+// const __dirname = path.resolve();
 
 initializeSocket(httpServer);
 
@@ -43,13 +43,13 @@ app.use("/api/messages", messageRoutes);
 
 app.use(errorMiddleware);
 
-if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, "/client/dist")));
+// if (process.env.NODE_ENV === "production") {
+//     app.use(express.static(path.join(__dirname, "/client/dist")));
 
-    app.get("*", (req, res) => {
-        res.sendFile(path.resolve(__dirname,  "client", "dist", "index.html"));
-    });
-}
+//     app.get("*", (req, res) => {
+//         res.sendFile(path.resolve(__dirname,  "client", "dist", "index.html"));
+//     });
+// }
 
 httpServer.listen(PORT, () => {
     console.log('server started at this port: ' + PORT);
