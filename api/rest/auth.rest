@@ -1,18 +1,18 @@
 ###
-POST http://localhost:5000/api/auth/signup
+POST https://tinder-app-92m1.vercel.app/api/auth/signup
 Content-Type: application/json
 
 {
     "name": "kamal3", 
     "email": "kamal3@gmail.com",
-    "password": "pass",
+    "password": "password",
     "age": 18,
-    "gender": "ff",
+    "gender": "male",
     "genderPreference": "female"
 }
 
 ###
-POST  https://tinder-app-6elr.vercel.app/api/auth/login
+POST  https://tinder-app-92m1.vercel.app/api/auth/login
 Content-Type: application/json
 
 { 

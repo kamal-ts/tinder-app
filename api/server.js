@@ -54,7 +54,8 @@ app.use(errorMiddleware);
 //     });
 // }
 
-httpServer.listen(PORT, () => {
-    console.log('server started at this port: ' + PORT);
-    connectDB();
-});
+// httpServer.listen(PORT, () => {
+//     console.log('server started at this port: ' + PORT);
+// });
+connectDB();
+export default app;
